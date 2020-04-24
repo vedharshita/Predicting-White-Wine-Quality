@@ -1,0 +1,73 @@
+---
+title: "WhiteWine"
+author: "Harshita Ved"
+date: "4/24/2020"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r 1}
+library(rmarkdown)
+library(ggplot2)
+library(tidyverse)
+library(dplyr)
+library(readr)
+library(DBI)
+library(RSQLite)
+library(purrr)
+library(mlbench)
+library(modelr)
+library(tibble)
+```
+
+```{r 2}
+#The data set contains various different attributes of White Wine like pH, sugar content, density, alcohol content etc. EDA is focused on how variables are related with each other as well with the response variable.
+#White Wine Dataset - https://archive.ics.uci.edu/ml/machine-learning-databases/wine-quality/
+#4898 observations
+
+WhiteWineData <- read.csv("D:\\Coursework\\Semester 1 Fall 2019\\DS 5110 - Introduction to Data Management and Processing\\Assignment 5\\winequality-white.csv",header=TRUE, sep=";")
+WhiteWineData <-  filter(WhiteWineData, `fixed.acidity` != "" | `volatile.acidity` != "" | `citric.acid` != "" | `residual.sugar` != "" | `chlorides` != "" | `free.sulfur.dioxide` != "" | `total.sulfur.dioxide` != "" | `density` != "" | `pH` != "" | `sulphates` != "" | `alcohol` != "" | `quality` != "")
+head(WhiteWineData, n =10)
+```
+
+```{r 3}
+#Quality of White Wine
+ggplot(data=WhiteWineData) + 
+  geom_bar(aes(x=`quality`), fill="maroon") +
+  xlab("Quality of White Wine") + ylab("Count") + 
+  ggtitle("Quality Distribution of the dataset of White Wines")
+```
+
+```{r 4}
+#pH range of White Wines
+ggplot(data=WhiteWineData) + 
+  geom_histogram(aes(x=pH), bins=100, fill="purple") +
+  xlab("pH range of White Wines") + 
+  ggtitle("pH range of White Wines with respect to Count")
+```
+
+```{r 5}
+#Alcohol content v/s Quality of White Wines
+ggplot(data=WhiteWineData) + 
+  geom_boxplot(aes(x=as.factor(quality), y=`alcohol`), fill="dark blue") +
+  xlab("Quality of White Wine") + ylab("Alcohol content of White Wine") + 
+  ggtitle("Alcohol content v/s Quality of White Wines")
+```
+
+
+```{r 6}
+#Alcohol content v/s Density of White Wines
+ggplot(data=WhiteWineData) + 
+  geom_point(aes(x=density, y=`alcohol`, color = as.factor(quality))) +
+  xlab("Density of White Wine") + ylab("Alcohol content of White Wine") + 
+  ggtitle("Alcohol content v/s Density of White Wines") + geom_smooth(aes(x=density, y=`alcohol`))
+```
+
+```{r 7}
+#Sulphur Dioxide v/s Quality of White Wines
+ggplot(data=WhiteWineData) + 
+  geom_boxplot(aes(x=as.factor(quality), y=`total.sulfur.dioxide`), fill="yellow") +
+  xlab("Quality of White Wine") + ylab("sulfur-dioxide content of White Wine") + 
+  ggtitle("Sulphur Dioxide v/s Quality of White Wines")
+```
